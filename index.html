@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Мария Дмитриева — Начинающий AI-разработчик</title>
+  <style>
+    /* ========== CSS ========== */
+    /* Переменные для светлой темы (по умолчанию) */
+    :root {
+      --bg: #f8fafc;
+      --text: #0f172a;
+      --text-light: #475569;
+      --card-bg: #ffffff;
+      --accent: #6366f1;
+      --accent-hover: #4f46e5;
+      --shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+      --radius: 20px;
+      --border: #e2e8f0;
+    }
+
+    /* Тёмная тема */
+    body.dark {
+      --bg: #0f172a;
+      --text: #f1f5f9;
+      --text-light: #94a3b8;
+      --card-bg: #1e293b;
+      --accent: #818cf8;
+      --accent-hover: #6366f1;
+      --shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+      --border: #334155;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    /* Кнопка темы */
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      color: var(--text);
+      font-size: 22px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow);
+      transition: transform 0.2s ease, background 0.3s ease;
+    }
+
+    .theme-toggle:hover {
+      transform: scale(1.1) rotate(15deg);
+    }
+
+    /* Контейнер */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ===== Первый экран ===== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 40px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Декоративные круги */
+    .hero::before,
+    .hero::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.4;
+      z-index: 0;
+    }
+
+    .hero::before {
+      width: 400px;
+      height: 400px;
+      background: var(--accent);
+      top: -100px;
+      left: -100px;
+      animation: float 8s ease-in-out infinite;
+    }
+
+    .hero::after {
+      width: 350px;
+      height: 350px;
+      background: #a78bfa;
+      bottom: -80px;
+      right: -80px;
+      animation: float 10s ease-in-out infinite reverse;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(30px, -30px); }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 700px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.2rem, 6vw, 4rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 16px;
+      animation: fadeUp 0.8s ease both;
+    }
+
+    .hero .subtitle {
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 24px;
+      animation: fadeUp 0.8s ease 0.15s both;
+    }
+
+    .hero .about-short {
+      font-size: 1.1rem;
+      color: var(--text-light);
+      margin-bottom: 36px;
+      animation: fadeUp 0.8s ease 0.3s both;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Кнопки */
+    .btn {
+      display: inline-block;
+      padding: 14px 32px;
+      border-radius: 999px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
+      animation: fadeUp 0.8s ease 0.45s both;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 8px 24px rgba(99, 102, 241, 0.35);
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(99, 102, 241, 0.45);
+    }
+
+    /* ===== Секции ===== */
+    section {
+      padding: 80px 0;
+    }
+
+    .section-title {
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+    .section-title span {
+      color: var(--accent);
+    }
+
+    /* Обо мне */
+    .about-text {
+      max-width: 750px;
+      margin: 0 auto;
+      text-align: center;
+      font-size: 1.1rem;
+      color: var(--text-light);
+    }
+
+    /* Карточки */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1);
+      border-color: var(--accent);
+    }
+
+    .card-icon {
+      font-size: 2.4rem;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .card h3 {
+      font-size: 1.25rem;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      color: var(--text-light);
+      font-size: 0.98rem;
+    }
+
+    /* Проекты */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .project-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .project-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .project-card h3 {
+      margin-bottom: 8px;
+    }
+
+    .project-card p {
+      color: var(--text-light);
+      font-size: 0.95rem;
+    }
+
+    .project-tag {
+      display: inline-block;
+      margin-top: 16px;
+      padding: 4px 14px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: rgba(99, 102, 241, 0.12);
+      color: var(--accent);
+    }
+
+    /* Контакты */
+    .contacts {
+      text-align: center;
+    }
+
+    .contacts p {
+      color: var(--text-light);
+      margin-bottom: 24px;
+    }
+
+    .contact-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: center;
+    }
+
+    .contact-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 999px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 500;
+      transition: transform 0.2s ease, border-color 0.3s ease, background 0.3s ease;
+    }
+
+    .contact-link:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent);
+      background: rgba(99, 102, 241, 0.08);
+    }
+
+    /* Подвал */
+    footer {
+      text-align: center;
+      padding: 32px 24px;
+      color: var(--text-light);
+      font-size: 0.9rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* Появление при скролле */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Адаптив */
+    @media (max-width: 640px) {
+      .theme-toggle {
+        top: 14px;
+        right: 14px;
+        width: 42px;
+        height: 42px;
+        font-size: 19px;
+      }
+
+      section {
+        padding: 56px 0;
+      }
+
+      .card {
+        padding: 24px 20px;
+      }
+
+      .hero {
+        padding: 80px 20px 40px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========== HTML ========== -->
+
+  <!-- Кнопка переключения темы -->
+  <button class="theme-toggle" id="themeToggle" aria-label="Переключить тему">🌙</button>
+
+  <!-- Первый экран -->
+  <header class="hero">
+    <div class="hero-content">
+      <h1>Мария Дмитриева</h1>
+      <p class="subtitle">Начинающий AI-разработчик</p>
+      <p class="about-short">
+        Учусь создавать современные сайты, Telegram-ботов и AI-приложения.
+        Верю, что технологии должны делать жизнь проще и интереснее.
+      </p>
+      <a href="#projects" class="btn btn-primary">Посмотреть, что я сделала</a>
+    </div>
+  </header>
+
+  <!-- Обо мне -->
+  <section id="about" class="reveal">
+    <div class="container">
+      <h2 class="section-title">Обо <span>мне</span></h2>
+      <p class="about-text">
+        Меня зовут Мария, мне 17. Я только начинаю свой путь в программировании
+        и особенно меня вдохновляет направление искусственного интеллекта.
+        Пока я учусь, ошибаюсь и пробую снова. Мне интересно всё, что связано с искусственным интеллектом: как он работает, чему уже научился и что сможет делать дальше. Верю, что лучший способ разобраться — делать маленькие шаги каждый день.
+      </p>
+    </div>
+  </section>
+
+  <!-- Что я хочу научиться создавать -->
+  <section id="skills" class="reveal">
+    <div class="container">
+      <h2 class="section-title">Что я хочу <span>научиться создавать</span></h2>
+      <div class="cards-grid">
+        <div class="card">
+          <span class="card-icon">🌐</span>
+          <h3>Сайты</h3>
+          <p>Современные адаптивные сайты и веб-приложения, удобные на любом устройстве.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">💻</span>
+          <h3>Игры</h3>
+          <p>Интересные и познавательные игры.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">🧠</span>
+          <h3>AI-приложения</h3>
+          <p>Приложения с использованием искусственного интеллекта для решения реальных задач.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Мои проекты -->
+  <section id="projects" class="reveal">
+    <div class="container">
+      <h2 class="section-title">Мои <span>проекты</span></h2>
+      <div class="projects-grid">
+        <div class="project-card">
+          <h3>Мой первый сайт</h3>
+          <p>
+            Персональная страница-визитка, созданная с нуля на HTML, CSS и JavaScript.
+            Адаптивный дизайн, тёмная тема и плавные анимации.
+          </p>
+          <span class="project-tag">HTML · CSS · JS</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Контакты -->
+  <section id="contacts" class="reveal">
+    <div class="container contacts">
+      <h2 class="section-title">Свяжитесь <span>со мной</span></h2>
+      <p>Буду рада новым знакомствам, советам и совместным проектам!</p>
+      <div class="contact-links">
+        <a href="mariy.dmitrievaa09@mail.ru" class="contact-link">📧 Email</a>
+        <a href="https://t.me/" target="_blank" rel="noopener" class="contact-link">✈️ Telegram</a>
+        <a href="https://github.com/" target="_blank" rel="noopener" class="contact-link">💻 GitHub</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Подвал -->
+  <footer>
+    © 2025 Мария Дмитриева. Сделано с душой ❤️
+  </footer>
+
+  <script>
+    // ========== JavaScript ==========
+
+    // 1. Переключение светлой / тёмной темы
+    const themeToggle = document.getElementById('themeToggle');
+    const body = document.body;
+
+    // Проверяем сохранённую тему в localStorage
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      body.classList.add('dark');
+      themeToggle.textContent = '☀️';
+    }
+
+    themeToggle.addEventListener('click', () => {
+      body.classList.toggle('dark');
+      const isDark = body.classList.contains('dark');
+      themeToggle.textContent = isDark ? '☀️' : '🌙';
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
+
+    // 2. Плавное появление секций при скролле
+    const revealElements = document.querySelectorAll('.reveal');
+
+    const revealObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
+
+    revealElements.forEach((el) => revealObserver.observe(el));
+
+    // 3. Плавная прокрутка для кнопки "Мои проекты" (дополнительно к CSS)
+    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+      anchor.addEventListener('click', function (e) {
+        const targetId = this.getAttribute('href');
+        const target = document.querySelector(targetId);
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
